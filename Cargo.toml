@@ -3,6 +3,7 @@ name = "etcdclient"
 version = "0.1.0"
 authors = ["jmu"]
 
+
 [dependencies]
 iron = "*"
 serde = "*"
@@ -10,6 +11,8 @@ serde_json ="*"
 serde_macros = "*"
 router = "*"
 urlencoded = "*"
+hyper = ">= 0.6.8"
+
 
 [dependencies.rust_etcd]
 path = "../rust_etcd"

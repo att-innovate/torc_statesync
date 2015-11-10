@@ -18,6 +18,7 @@ extern crate serde;
 extern crate serde_json;
 extern crate urlencoded;
 extern crate rust_etcd;
+extern crate hyper;
 
 use iron::prelude::*;
 use iron::status;
@@ -27,13 +28,27 @@ use std::io::Read;
 use std::collections::BTreeMap;
 use std::collections::HashMap;
 use urlencoded::UrlEncodedQuery;
-use rust_etcd::{Client, TestClient};
+use rust_etcd::TestClient;
+use hyper::Client as hclient;
 
 fn main() {
     let mut router = Router::new();
 
     router.get("/", move |r: &mut Request| do_request(r));
     router.post("/set", move |r: &mut Request| set_entry(r));
+    router.get("/health", move |r: &mut Request| do_healthcheck());
+
+    // get service health check
+    fn do_healthcheck() -> IronResult<Response> {
+        println!("Check health status of ETCD instance");
+        let client = hclient::new();
+        let mut res = client.get("http://10.16.0.31:2379/health").send().unwrap();
+        //assert_eq!(res.status, hyper::Ok);
+        let mut response = String::new();
+        res.read_to_string(&mut response).unwrap();
+        println!("{}", response);
+        Ok(Response::with((status::Ok, response)))
+    }
 
     // get service with attributes
     fn do_request(request: &mut Request) -> IronResult<Response> {
@@ -47,7 +62,7 @@ fn main() {
         };
 
         // TODO: load key+value out of ETCD
-        let mut result = lookup("key".to_string());
+        let result = lookup("key".to_string());
 
         // Prepare result set to be exposed as JSON
         let mut entry2 = BTreeMap::new();
@@ -74,16 +89,16 @@ fn main() {
 
     fn lookup(key: String) -> String {
         println!("Lookup value [{}] in key store.", key);
-        let testClient = TestClient::new();
+        let test_client = TestClient::new();
 
         let key = String::from("/att/a");
         let input = String::from("Foundry");
 
         // initial input to start communication - necessary for establishing further communication
-        let response = testClient.c.set(&key, &input, None).ok().unwrap();
+        test_client.c.set(&key, &input, None).ok().unwrap();
 
         println!("client setup");
-        let response = testClient.c.get(&key, false, false, false).ok().unwrap();
+        let response = test_client.c.get(&key, false, false, false).ok().unwrap();
 
         println!("Value parsing");
         let value = response.node.value.unwrap();
@@ -97,11 +112,12 @@ fn main() {
 
     fn store(map: HashMap<String, String>){
         println!("store");
-        let testClient1 = TestClient::new();
+        let test_client = TestClient::new();
         for (key, value) in &map {
             println!("key [{}] and value [{}]", key, value);
-            let response = testClient1.c.set(&key, &value, None).ok().unwrap();
-            let response = testClient1.c.get(&key, false, false, false).ok().unwrap();
+            test_client.c.set(&key, &value, None).ok().unwrap();
+            //let response = testClient1.c.set(&key, &value, None).ok().unwrap();
+            //let response = testClient1.c.get(&key, false, false, false).ok().unwrap();
 
         }
     }
