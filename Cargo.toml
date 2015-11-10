@@ -1,0 +1,16 @@
+[package]
+name = "etcdclient"
+version = "0.1.0"
+authors = ["jmu"]
+
+[dependencies]
+iron = "*"
+serde = "*"
+serde_json ="*"
+serde_macros = "*"
+router = "*"
+urlencoded = "*"
+
+[dependencies.rust_etcd]
+path = "../rust_etcd"
+version = "0.2.0"
