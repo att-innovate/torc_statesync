@@ -1,6 +1,6 @@
 ##Usage##
 ###Post values to etcdclient###
-curl -X POST -d '{"/att/x":"x2", "/att/y":"c1"}' http://localhost:3000/set
+$ curl -X POST -d '{"/att/x":"x2", "/att/y":"c1"}' http://localhost:3000/set
 
 ###Check results###
 $ curl -L http://10.16.0.31:2379/v2/keys/att/x
