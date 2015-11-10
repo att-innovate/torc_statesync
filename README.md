@@ -10,3 +10,7 @@ Juliuss-MacBook-Pro:/ jmu$ curl -L http://10.16.0.31:2379/v2/keys/att/y
 // just get without parameter support yet
 curl -L http://localhost:3000/
 curl -L http://localhost:3000/?name=Julius&company=ATT
+
+// check health status of the etcd cluster
+curl -L http://localhost:3000/health
+{"health": "true"}
