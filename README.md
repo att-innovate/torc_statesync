@@ -11,7 +11,7 @@ A Rust client library for [etcd](https://github.com/coreos/etcd).
 * [etcd](https://crates.io/crates/etcd) on crates.io
 * [Documentation](http://jimmycuadra.github.io/rust-etcd/) for the latest crates.io release
 
-# License
+## License ##
 
 [MIT](http://opensource.org/licenses/MIT)
 
