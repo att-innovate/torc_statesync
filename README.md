@@ -1,10 +1,10 @@
-# merger of the projects
-# -> https://github.com/coreos/etcd - A Rust client library for [etcd]
-# -> https://github.com/iron/router
-# -> https://github.com/brson/httptest
+## merger of the projects##
+* -> https://github.com/coreos/etcd - A Rust client library for [etcd]
+* -> https://github.com/iron/router
+* -> https://github.com/brson/httptest
 
 
-# etcd
+## etcd##
 
 A Rust client library for [etcd](https://github.com/coreos/etcd).
 
