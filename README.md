@@ -1,3 +1,20 @@
+# merger of the projects
+# -> https://github.com/coreos/etcd - A Rust client library for [etcd]
+# -> https://github.com/iron/router
+# -> https://github.com/brson/httptest
+
+
+# etcd
+
+A Rust client library for [etcd](https://github.com/coreos/etcd).
+
+* [etcd](https://crates.io/crates/etcd) on crates.io
+* [Documentation](http://jimmycuadra.github.io/rust-etcd/) for the latest crates.io release
+
+# License
+
+[MIT](http://opensource.org/licenses/MIT)
+
 ##Usage##
 ###Post values to etcdclient###
 $ curl -X POST -d '{"/att/x":"x2", "/att/y":"c1"}' http://localhost:3000/set

@@ -10,14 +10,14 @@
 // (tcp.port == 2379 || udp.port == 2379) && http
 
 #![feature(custom_derive, plugin)]
-#![plugin(serde_macros)]
+//#![plugin(serde_macros)]
 
 extern crate iron;
 extern crate router;
 extern crate serde;
 extern crate serde_json;
 extern crate urlencoded;
-extern crate rust_etcd;
+extern crate torc_statesync;
 extern crate hyper;
 
 use iron::prelude::*;
@@ -28,7 +28,7 @@ use std::io::Read;
 use std::collections::BTreeMap;
 use std::collections::HashMap;
 use urlencoded::UrlEncodedQuery;
-use rust_etcd::TestClient;
+use torc_statesync::TestClient;
 use hyper::Client as hclient;
 
 fn main() {
