@@ -42,7 +42,7 @@ fn main() {
     fn do_healthcheck() -> IronResult<Response> {
         println!("Check health status of ETCD instance");
         let client = hclient::new();
-        let mut res = client.get("http://10.16.0.31:2379/health").send().unwrap();
+        let mut res = client.get("http://192.168.0.50:2379/health").send().unwrap();
         //assert_eq!(res.status, hyper::Ok);
         let mut response = String::new();
         res.read_to_string(&mut response).unwrap();
@@ -53,23 +53,33 @@ fn main() {
     // get service with attributes
     fn do_request(request: &mut Request) -> IronResult<Response> {
         println!("Load attributes out of the request uri");
+
+        // Prepare result set to be exposed as JSON
+        let mut result = BTreeMap::new();
+
         match request.get_ref::<UrlEncodedQuery>() {
             Ok(ref hashmap) => {
                 println!("Parsed GET request query string:\n {:?}", hashmap);
-                println!("store")
+//                println!("lookup key in ECTD");
+
+				for keys in hashmap.keys() {
+//				    println!("keys>{}", keys);
+//				    println!("keys>{}", keys.to_string());
+				    let mut parameter = String::new();
+				    for x in hashmap.values() {
+//					    println!("{}", x[0]);
+					    parameter = x[0].to_string();
+					}
+				    let value = lookup(parameter);
+
+                	result.insert(keys, value);
+				}
+//				println!("looked up key in ECTD");
             },
             Err(ref e) => println!("{:?}", e)
         };
 
-        // TODO: load key+value out of ETCD
-        let result = lookup("key".to_string());
-
-        // Prepare result set to be exposed as JSON
-        let mut entry2 = BTreeMap::new();
-        entry2.insert(result, "Test1");
-        entry2.insert("b".to_string(), "Test2");
-
-        let payload = serde_json::to_string(&entry2).unwrap();
+        let payload = serde_json::to_string(&result).unwrap();
         Ok(Response::with((status::Ok, payload)))
     }
 
@@ -91,11 +101,11 @@ fn main() {
         println!("Lookup value [{}] in key store.", key);
         let test_client = TestClient::new();
 
-        let key = String::from("/att/a");
-        let input = String::from("Foundry");
+        let tkey = String::from("/att/name");
+        let tinput = String::from("Foundry");
 
         // initial input to start communication - necessary for establishing further communication
-        test_client.c.set(&key, &input, None).ok().unwrap();
+        test_client.c.set(&tkey, &tinput, None).ok().unwrap();
 
         println!("client setup");
         let response = test_client.c.get(&key, false, false, false).ok().unwrap();
