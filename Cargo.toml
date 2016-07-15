@@ -1,0 +1,25 @@
+[package]
+name = "statesync"
+version = "0.2.3"
+authors = ["MUELLER, JULIUS <jm169k@att.com>"]
+
+[dependencies]
+lazy_static = "0.1.*"
+serde_json ="*"
+serde = "*"
+hyper = "*"
+libc = "0.2"
+rustc-serialize = "0.3"
+
+[dependencies.torc_fboss_client]
+git = "https://github.com/att-innovate/torc_fboss_client.git"
+
+[dependencies.torc_snaproute_client]
+git = "https://github.com/att-innovate/torc_snaproute_client.git"
+version = "*"
+
+[dependencies.rust-crypto]
+git = "https://github.com/DaGenix/rust-crypto"
+
+[dependencies.clap]
+version = "*"
